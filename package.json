@@ -36,7 +36,7 @@
     "bcrypt-nodejs": "^0.0.3",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",
-    "oauth2-server": "next"
+    "oauth2-server": "https://github.com/oauthjs/node-oauth2-server#v3.0.0-b4"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
