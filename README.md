@@ -1,39 +1,179 @@
-# lux-oauth2
-OAuth2 authentication middleware for [Lux](https://github.com/postlight/lux) API framework.
+Lux OAuth2 ![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.svg) [![npm](https://img.shields.io/npm/v/lux-oauth2.svg)](https://www.npmjs.com/package/lux-oauth2)
+======
+
+[OAuth2](https://oauth.net/2/) authentication server & middleware for [Lux](https://github.com/postlight/lux) API framework, built upon [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server).
 
 ## Install
 
     $ npm install --save lux-oauth2
 
 ## Usage
-An example usage of using lux-oauth2 is shown below.
+Lux OAuth2 has been built with extension in mind. More grant types will soon be available out-of-the-box, along with details of how to define your own custom grant types.
 
-```javascript
-import { Controller } from 'lux-framework';
-import oauth2 from 'lux-oauth2';
+**Currently however, Lux OAuth2 only supports a `password` with `refresh_token` grant type flow.**
 
-class ApplicationController extends Controller {
-  beforeAction = [
-    oauth2
+### 1. Database
+Firstly, ready your database with the right tables and columns. The following models are required:
+
+- `user`
+- `oauth-access-token`
+- `oauth-client`
+- `oauth-refresh-token`
+
+Check out the example models and migrations in the test app.
+
+### 2. OAuth2 Server
+Next, initialize a new OAuth2 server instance. Ensure to pass the server all the required models and `OAuth2PasswordGrantType` in the `grantTypes` array.
+
+```js
+// app/middleware/oauth2.js
+import { OAuth2BaseServer, OAuth2PasswordGrantType } from 'lux-oauth2';
+
+import OAuthAccessToken from 'app/models/oauth-access-token';
+import OAuthClient from 'app/models/oauth-client';
+import OAuthRefreshToken from 'app/models/oauth-refresh-token';
+import User from 'app/models/user';
+
+class OAuth2Server extends OAuth2BaseServer {
+  static models = {
+    accessToken: OAuthAccessToken,
+    client: OAuthClient,
+    refreshToken: OAuthRefreshToken,
+    user: User
+  };
+
+  static grantTypes = [
+    OAuth2PasswordGrantType
   ];
+
 }
+
+export default new OAuth2Server();
 ```
 
-[lux-unless](https://github.com/nickschot/lux-unless) can be used to keep certain endpoints from being authorized by lux-oauth2.
+### 3. Token route
 
-```javascript
+A `POST` action will be required so the OAuth2 server can spit back a token. OAuth2 recommends using `/oauth/token`, but the `requestToken` action may be called anywhere.
+
+```js
+// app/routes.js
+this.resource('oauth', {
+  only: []
+}, function(){
+  this.post('/token', 'token');
+});
+```
+
+Presently, the payload sent to the server must be wrapped in a `data` attribute, with the following controller setup:
+
+```js
+// app/controllers/oauth.js
 import { Controller } from 'lux-framework';
-import oauth2 from 'lux-oauth2';
-import unless from 'lux-unless';
+import OAuth2Server from 'app/middleware/oauth2';
+
+class OauthController extends Controller {
+  params = [
+    'grantType',
+    'username',
+    'password'
+  ]
+
+  query = [
+    'data'
+  ]
+
+  token(request, response) {
+    return OAuth2Server.requestToken(request, response);
+  }
+}
+
+export default OauthController;
+```
+
+### 4. Authenticate
+The OAuth2 server will attempt to authenticate each request. Add the authenticate action to the ApplicationController's `beforeAction` to ensure it is called first.
+
+```js
+import { Controller } from 'lux-framework';
+import OAuth2Server from 'app/middleware/oauth2';
 
 class ApplicationController extends Controller {
   beforeAction = [
-    unless({ path: ['/users/login'] }, oauth2)
+    OAuth2Server.authenticate
   ];
 }
+
+export default ApplicationController;
+```
+
+The authenticate action adds an `oauth2` object to the `request`, to be used in any action thereafter. For example:
+
+```js
+console.log(request.oauth2);
+// => { isAuthenticated: true, currentUser: User }
+```
+
+### 5. Authenticated route
+To put a resource behind an authenticated barrier, simply add the authenticatedRoute action to any resource you wish to protect.
+
+```js
+// app/controllers/user.js
+import { Controller } from 'lux-framework';
+import OAuth2Server from 'app/middleware/oauth2';
+
+class UsersController extends Controller {
+  beforeAction = [
+    OAuth2Server.authenticatedRoute
+  ];
+}
+
+export default UsersController;
+```
+
+Keep certain endpoints from requiring authentication using [lux-unless](https://github.com/nickschot/lux-unless):
+
+```js
+// app/controllers/user.js
+import { Controller } from 'lux-framework';
+import OAuth2Server from 'app/middleware/oauth2';
+
+class UsersController extends Controller {
+  beforeAction = [
+    unless({ path: ['/users/stats'] }, OAuth2Server.authenticatedRoute)
+  ];
+}
+
+export default UsersController;
 ```
 
 ## Options
+
+### Server Options
+
+The following additional options can be set on the OAuth2 server:
+
+```js
+class OAuth2Server extends OAuth2BaseServer {
+  accessTokenLifetime = 3600;
+  refreshTokenLifetime = 1209600;
+}
+```
+
+### Overriding methods
+
+If an edge case arises where the OAuth2 server's default methods need to be overridden, simply redefine the method in the OAuth2Server.
+
+```js
+class OAuth2Server extends OAuth2BaseServer {
+  getUser = async (email, password, done) => {
+    // add your custom method of retrieving the user...
+  }
+}
+```
+
+### Custom Grant types
+
+Coming soon™...
 
 ## Related Modules
 
