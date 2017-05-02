@@ -13,14 +13,17 @@ Lux OAuth2 has been built with extension in mind. More grant types will soon be 
 **Currently however, Lux OAuth2 only supports a `password` with `refresh_token` grant type flow.**
 
 ### 1. Database
-Firstly, ready your database with the right tables and columns. The following models are required:
+Firstly, ready your database with the right tables and columns. The models listed below are required. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/barebones-oauth2) for more guidance.
 
 - `user`
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/user.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218012870-create-users.js))
 - `oauth-access-token`
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-access-token.js) |
+[Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218014329-create-oauth-access-tokens.js))
 - `oauth-client`
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-client.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218015680-create-oauth-clients.js) | [Seed](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/seed.js#L8-L13))
 - `oauth-refresh-token`
-
-Check out the example models and migrations in the test app.
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-refresh-token.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218013236-create-oauth-refresh-tokens.js))
 
 ### 2. OAuth2 Server
 Next, initialize a new OAuth2 server instance. Ensure to pass the server all the required models and `OAuth2PasswordGrantType` in the `grantTypes` array.
