@@ -175,7 +175,7 @@ Coming soon™...
 
     $ cd /examples/barebones-oauth2
     $ npm install
-    $ lux db:drop && lux db:create && lux db:migrate && lux db:seed
+    $ lux db:create && lux db:migrate && lux db:seed
     $ lux serve
 
 Use the [Lux OAuth2 Example Postman Collection](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/test/lux-oauth2-example.postman_collection.json) to check the following:

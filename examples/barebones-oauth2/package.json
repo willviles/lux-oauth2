@@ -14,7 +14,7 @@
     "bcrypt-nodejs": "^0.0.3",
     "knex": "0.12.6",
     "lux-framework": "1.1.7",
-    "lux-oauth2": "https://github.com/willviles/lux-oauth2",
+    "lux-oauth2": "^0.0.2",
     "sqlite3": "3.1.8"
   },
   "engines": {
