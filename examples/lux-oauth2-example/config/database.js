@@ -1,16 +1,16 @@
 export default {
   development: {
     driver: 'sqlite3',
-    database: 'barebones_oauth2_dev'
+    database: 'lux_oauth2_example_dev'
   },
 
   test: {
     driver: 'sqlite3',
-    database: 'barebones_oauth2_test'
+    database: 'lux_oauth2_example_test'
   },
 
   production: {
     driver: 'sqlite3',
-    database: 'barebones_oauth2_prod'
+    database: 'lux_oauth2_example_prod'
   }
 };

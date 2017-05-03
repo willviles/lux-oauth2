@@ -1,7 +1,7 @@
 {
-  "name": "barebones-oauth2",
+  "name": "lux-oauth2-example",
   "version": "0.0.1",
-  "description": "Test app for lux-oauth2",
+  "description": "Example app for lux-oauth2",
   "scripts": {
     "start": "lux serve",
     "test": "lux test"

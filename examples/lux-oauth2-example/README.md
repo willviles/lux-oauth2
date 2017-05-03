@@ -1,9 +1,9 @@
-# barebones-oauth2
+# lux-oauth2-example
 
 ## Installation
 
 *   `git clone https://github.com/<this-repository>`
-*   `cd barebones-oauth2`
+*   `cd lux-oauth2-example`
 *   `npm install`
 
 ## Running / Development

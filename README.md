@@ -16,17 +16,17 @@ Lux OAuth2 has been built with extension in mind. More grant types will soon be 
 ---
 
 ### 1. Database
-Ready your database with the required models listed below. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/barebones-oauth2) for more guidance.
+Ready your database with the required models listed below. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/lux-oauth2-example) for more guidance.
 
 - `user`
-([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/user.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218012870-create-users.js))
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/app/models/user.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/db/migrate/2017050218012870-create-users.js))
 - `oauth-access-token`
-([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-access-token.js) |
-[Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218014329-create-oauth-access-tokens.js))
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/app/models/oauth-access-token.js) |
+[Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/db/migrate/2017050218014329-create-oauth-access-tokens.js))
 - `oauth-client`
-([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-client.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218015680-create-oauth-clients.js) | [Seed](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/seed.js#L8-L13))
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/app/models/oauth-client.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/db/migrate/2017050218015680-create-oauth-clients.js) | [Seed](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/db/seed.js#L8-L13))
 - `oauth-refresh-token`
-([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-refresh-token.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218013236-create-oauth-refresh-tokens.js))
+([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/app/models/oauth-refresh-token.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/db/migrate/2017050218013236-create-oauth-refresh-tokens.js))
 
 ### 2. OAuth2 Server
 Initialize a new OAuth2 server instance. Ensure to add all the required models and any grant types you wish to use.
@@ -175,12 +175,12 @@ Coming soon™...
 
 ## Example
 
-    $ cd /examples/barebones-oauth2
+    $ cd /examples/lux-oauth2-example
     $ npm install
     $ lux db:create && lux db:migrate && lux db:seed
     $ lux serve
 
-Use the [Lux OAuth2 Example Postman Collection](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/test/lux-oauth2-example.postman_collection.json) to check the following:
+Use the [Lux OAuth2 Example Postman Collection](https://github.com/willviles/lux-oauth2/blob/master/examples/lux-oauth2-example/test/lux-oauth2-example.postman_collection.json) to check the following:
 - Request a token as the test user.
 - Try modifying test user `email` & `password` sent to the token endpoint to check credentials errors.
 - Use the `refresh_token` value to auth via refresh token.
