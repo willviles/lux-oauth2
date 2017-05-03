@@ -1,5 +1,6 @@
-Lux OAuth2 ![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.svg) [![npm](https://img.shields.io/npm/v/lux-oauth2.svg)](https://www.npmjs.com/package/lux-oauth2)
+Lux OAuth2
 ======
+![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.svg) [![npm](https://img.shields.io/npm/v/lux-oauth2.svg)](https://www.npmjs.com/package/lux-oauth2) [![Gitter](https://img.shields.io/gitter/room/postlight/lux.svg?style=flat-square)](https://gitter.im/postlight/lux)
 
 [OAuth2](https://oauth.net/2/) authentication server & middleware for [Lux](https://github.com/postlight/lux) API framework, built upon [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server).
 
@@ -10,10 +11,10 @@ Lux OAuth2 ![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.s
 ## Usage
 Lux OAuth2 has been built with extension in mind. More grant types will soon be available out-of-the-box, along with details of how to define your own custom grant types.
 
-**Currently however, Lux OAuth2 only supports a `password` with `refresh_token` grant type flow.**
+**Currently, Lux OAuth2 only supports a `password` with `refresh_token` grant type flow.**
 
 ### 1. Database
-Firstly, ready your database with the right tables and columns. The models listed below are required. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/barebones-oauth2) for more guidance.
+Ready your database with the required models listed below. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/barebones-oauth2) for more guidance.
 
 - `user`
 ([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/user.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218012870-create-users.js))
@@ -26,7 +27,7 @@ Firstly, ready your database with the right tables and columns. The models liste
 ([Model](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/app/models/oauth-refresh-token.js) | [Migration](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/db/migrate/2017050218013236-create-oauth-refresh-tokens.js))
 
 ### 2. OAuth2 Server
-Next, initialize a new OAuth2 server instance. Ensure to pass the server all the required models and `OAuth2PasswordGrantType` in the `grantTypes` array.
+Initialize a new OAuth2 server instance. Ensure to add all the required models and any grant types you wish to use.
 
 ```js
 // app/middleware/oauth2.js
@@ -56,7 +57,7 @@ export default new OAuth2Server();
 
 ### 3. Token route
 
-A `POST` action will be required so the OAuth2 server can spit back a token. OAuth2 recommends using `/oauth/token`, but the `requestToken` action may be called anywhere.
+The token endpoint will require a `POST` action. OAuth2 recommends using the `/oauth/token` route.
 
 ```js
 // app/routes.js
@@ -67,7 +68,7 @@ this.resource('oauth', {
 });
 ```
 
-Presently, the payload sent to the server must be wrapped in a `data` attribute, with the following controller setup:
+The payload sent to the server must be wrapped in a `data` attribute. The following controller setup allows the parameters through to the controller, where the `requestToken` function is then called.
 
 ```js
 // app/controllers/oauth.js
@@ -94,7 +95,7 @@ export default OauthController;
 ```
 
 ### 4. Authenticate
-The OAuth2 server will attempt to authenticate each request. Add the authenticate action to the ApplicationController's `beforeAction` to ensure it is called first.
+Add the authenticate action to the application controller's `beforeAction` array to ensure the OAuth2 server attempts to authenticate a user for each request.
 
 ```js
 import { Controller } from 'lux-framework';
@@ -109,7 +110,7 @@ class ApplicationController extends Controller {
 export default ApplicationController;
 ```
 
-The authenticate action adds an `oauth2` object to the `request`, to be used in any action thereafter. For example:
+This adds an `oauth2` object to the request, containing an `isAuthenticated` boolean value and the `currentUser`.
 
 ```js
 console.log(request.oauth2);
@@ -117,7 +118,7 @@ console.log(request.oauth2);
 ```
 
 ### 5. Authenticated route
-To put a resource behind an authenticated barrier, simply add the authenticatedRoute action to any resource you wish to protect.
+Add the `authenticatedRoute` action to any resource you wish to protect.
 
 ```js
 // app/controllers/user.js
@@ -133,27 +134,19 @@ class UsersController extends Controller {
 export default UsersController;
 ```
 
-Keep certain endpoints from requiring authentication using [lux-unless](https://github.com/nickschot/lux-unless):
+Keep certain endpoints from requiring authentication using [lux-unless](https://github.com/nickschot/lux-unless).
 
 ```js
-// app/controllers/user.js
-import { Controller } from 'lux-framework';
-import OAuth2Server from 'app/middleware/oauth2';
-
-class UsersController extends Controller {
-  beforeAction = [
-    unless({ path: ['/users/stats'] }, OAuth2Server.authenticatedRoute)
-  ];
-}
-
-export default UsersController;
+beforeAction = [
+  unless({ path: ['/users/stats'] }, OAuth2Server.authenticatedRoute)
+];
 ```
 
 ## Options
 
 ### Server Options
 
-The following additional options can be set on the OAuth2 server:
+The following additional options can be set on the OAuth2 server.
 
 ```js
 class OAuth2Server extends OAuth2BaseServer {
@@ -164,7 +157,7 @@ class OAuth2Server extends OAuth2BaseServer {
 
 ### Overriding methods
 
-If an edge case arises where the OAuth2 server's default methods need to be overridden, simply redefine the method in the OAuth2Server.
+If you need to override one of the OAuth2Server's core methods, simply redefine the method in the OAuth2Server.
 
 ```js
 class OAuth2Server extends OAuth2BaseServer {
@@ -178,15 +171,29 @@ class OAuth2Server extends OAuth2BaseServer {
 
 Coming soon™...
 
-## Related Modules
+## Example
 
-- [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) - OAuth2 server in Node.js.
-- [lux-unless](https://github.com/nickschot/lux-unless) - Conditionally skip a middleware.
+    $ cd /examples/barebones-oauth2
+    $ npm install
+    $ lux db:drop && lux db:create && lux db:migrate && lux db:seed
+    $ lux serve
+
+Use the [Lux OAuth2 Example Postman Collection](https://github.com/willviles/lux-oauth2/blob/master/examples/barebones-oauth2/test/lux-oauth2-example.postman_collection.json) to check the following:
+- Request a token as the test user.
+- Try modifying test user `email` & `password` sent to the token endpoint to check credentials errors.
+- Use the `refresh_token` value to auth via refresh token.
+- Try to access `/users` to find it requires authentication.
+- Add `Bearer <YOUR_ACCESS_TOKEN>` to the `Authorization` header to access the `/users` data.
 
 ## Tests
 
     $ npm install
     $ npm test
+
+## Related Modules
+
+- [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server) - OAuth2 server in Node.js.
+- [lux-unless](https://github.com/nickschot/lux-unless) - Conditionally skip a middleware.
 
 ## License
 This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.

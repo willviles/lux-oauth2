@@ -1,0 +1,104 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Lux OAuth2 Example",
+		"_postman_id": "284038aa-22aa-0a41-b72c-38ca974f6e02",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Password Grant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"AccessToken\", data.access_token);",
+							"postman.setEnvironmentVariable(\"RefreshToken\", data.refresh_token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:4000/oauth/token",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/vnd.api+json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"data\": {\n\t  \"grant_type\": \"password\",\n\t  \"username\": \"test@user.com\",\n\t  \"password\": \"password\"\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"url": "http://localhost:4000/users",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer f43be330d04b00bc8433e7dd4ba2e0d1182a38dc",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"AccessToken\", data.access_token);",
+							"postman.setEnvironmentVariable(\"RefreshToken\", data.refresh_token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:4000/oauth/token",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/vnd.api+json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"data\": {\n    \"grant_type\": \"refresh_token\",\n    \"refresh_token\": \"724553573b81976dea0e5b7e0e4e79627477399e\"\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
