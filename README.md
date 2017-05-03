@@ -1,8 +1,8 @@
-Lux OAuth2
-======
+<img src="https://cloud.githubusercontent.com/assets/2046935/25653846/97a92a0e-2fe6-11e7-9a11-180708ff0f18.png" width="150" height="70">
+
 ![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.svg) [![npm](https://img.shields.io/npm/v/lux-oauth2.svg)](https://www.npmjs.com/package/lux-oauth2) [![Gitter](https://img.shields.io/gitter/room/postlight/lux.svg?style=flat-square)](https://gitter.im/postlight/lux)
 
-[OAuth2](https://oauth.net/2/) authentication server & middleware for [Lux](https://github.com/postlight/lux) API framework, built upon [node-oauth2-server](https://github.com/oauthjs/node-oauth2-server).
+**Lux OAuth2** is an [OAuth2](https://oauth.net/2/) authentication server & middleware for [Lux](https://github.com/postlight/lux) API framework.
 
 ## Install
 
@@ -12,6 +12,8 @@ Lux OAuth2
 Lux OAuth2 has been built with extension in mind. More grant types will soon be available out-of-the-box, along with details of how to define your own custom grant types.
 
 **Currently, Lux OAuth2 only supports a `password` with `refresh_token` grant type flow.**
+
+---
 
 ### 1. Database
 Ready your database with the required models listed below. Check out the [example app](https://github.com/willviles/lux-oauth2/tree/master/examples/barebones-oauth2) for more guidance.
