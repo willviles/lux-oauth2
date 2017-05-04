@@ -2,7 +2,7 @@
 
 ![Download count all time](https://img.shields.io/npm/dt/lux-oauth2.svg) [![npm](https://img.shields.io/npm/v/lux-oauth2.svg)](https://www.npmjs.com/package/lux-oauth2) [![Gitter](https://img.shields.io/gitter/room/postlight/lux.svg?style=flat-square)](https://gitter.im/postlight/lux)
 
-**Lux OAuth2** is an [OAuth2](https://oauth.net/2/) authentication server & middleware for [Lux](https://github.com/postlight/lux) API framework.
+**Lux OAuth2** is an [OAuth2](https://oauth.net/2/) authorization server & middleware for [Lux](https://github.com/postlight/lux) API framework.
 
 ## Install
 
