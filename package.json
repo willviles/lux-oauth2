@@ -1,6 +1,6 @@
 {
   "name": "lux-oauth2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "OAuth2 authorization middleware for Lux API framework.",
   "keywords": [
     "auth",
